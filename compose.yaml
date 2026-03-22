@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: eduquiz-mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eduquiz
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    container_name: eduquiz-redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: eduquiz-meilisearch
+    restart: always
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: eduquiz-mailpit
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: eduquiz-phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+
+volumes:
+  mysql_data:
