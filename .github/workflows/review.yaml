@@ -1,0 +1,29 @@
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  code_review_job:
+    runs-on: ubuntu-latest
+    name: ChatGPT Code Review
+    steps:
+      - name: GenAI Code Review
+        uses: cirolini/genai-code-review@v2
+        with:
+          openai_api_key: ${{ secrets.openai_api_key }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_pr_id: ${{ github.event.number }}
+          openai_model: "GPT-5.3" # optional
+          openai_temperature: 0.2 # optional
+          openai_max_tokens: 2048 # optional
+          mode: patch # files or patch
+          language: en # optional, default is 'en'
+          custom_prompt: |
+            Review this code focusing only on critical issues:
+            - Bugs or incorrect logic
+            - Security risks
+            - Performance problems
+            - Bad practices
+
+            Give concise feedback with clear suggestions.
+            Ignore minor style issues unless they affect readability or maintainability.
