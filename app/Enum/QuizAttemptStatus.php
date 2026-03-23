@@ -22,5 +22,4 @@ enum QuizAttemptStatus: string {
                 'value' => $case->value,
             ], self::cases());
         }
-
 }
